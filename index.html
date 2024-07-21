@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial, sans-serif';
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f0f8ff;
+        }
+        .banner {
+            text-align: center;
+            background-color: #ffeb3b;
+            padding: 20px;
+            width: 100%;
+        }
+        .banner h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #ff5722;
+        }
+        .coupon {
+            margin-top: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .coupon p {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        #webgl-canvas {
+            width: 100%;
+            height: 60vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <h1>Happy Birthday!</h1>
+    </div>
+    <div class="coupon">
+        <p>Enjoy Weekly Date Nights with This Coupon!</p>
+    </div>
+    <canvas id="webgl-canvas"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // WebGL scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight * 0.6), 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl-canvas') });
+
+        renderer.setSize(window.innerWidth, window.innerHeight * 0.6);
+        document.body.appendChild(renderer.domElement);
+
+        // Adding light
+        const light = new THREE.AmbientLight(0x404040);
+        scene.add(light);
+
+        // Loading texture
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load('image.png', function (texture) {
+            const material = new THREE.SpriteMaterial({ map: texture });
+            for (let i = 0; i < 10; i++) {
+                let sprite = new THREE.Sprite(material);
+                sprite.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, Math.random() * 10 - 5);
+                sprite.scale.set(1, 1, 1);
+                scene.add(sprite);
+            }
+        });
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight * 0.6);
+            camera.aspect = window.innerWidth / (window.innerHeight * 0.6);
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
